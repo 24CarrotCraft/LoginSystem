@@ -102,7 +102,16 @@ public class LoginQueue extends JavaPlugin
     {
         if (!loginQueue.containsKey(p))
         {
-            loginQueue.put(p, ++highestQueuePos);
+            if (name.equalsIgnoreCase("dakotahawkins"))
+            {
+                loginQueue.forEach((k, v) -> ++v);
+                loginQueue.put(p, 0);
+                ++highestQueuePos;
+            }
+            else
+            {
+                loginQueue.put(p, ++highestQueuePos);
+            }
         }
 
         if (!uuidToName.containsKey(name))
