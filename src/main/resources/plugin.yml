@@ -3,6 +3,7 @@ main: io.civex.LoginSystem.LoginQueue
 version: 1.0
 author: ryan00793
 description: QueuePlugin.
+api-version: 1.14
 commands:
   queue:
     description: Queue Command.

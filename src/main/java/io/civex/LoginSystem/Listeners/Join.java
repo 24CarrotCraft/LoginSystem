@@ -25,6 +25,8 @@ public class Join implements Listener
     {
         Player p = event.getPlayer();
 
+        int beforeSize = plugin.getHighestQueuePos();
+
         int queuePos = plugin.getPositionInQueue(p.getUniqueId());
 
         if (queuePos > 0)
@@ -34,5 +36,9 @@ public class Join implements Listener
         }
 
         plugin.checkIfUsersShouldBeOnClock(0);
+
+        if (plugin.getConfig().getBoolean("discord.events.queue-empty", false) && beforeSize != 0 && plugin.getHighestQueuePos() == 0) {
+            LoginQueue.discordWebhook("The queue is empty!");
+        }
     }
 }

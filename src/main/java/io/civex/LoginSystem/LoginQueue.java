@@ -7,6 +7,12 @@ import io.civex.LoginSystem.Listeners.Login;
 import io.civex.LoginSystem.Listeners.Logout;
 import io.civex.LoginSystem.Listeners.ServerPing;
 import io.civex.LoginSystem.Utils.LoginTimeRunnable;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -59,6 +65,10 @@ public class LoginQueue extends JavaPlugin
 
     private void loadConfig() {
         config = Bukkit.getPluginManager().getPlugin("LoginQueue").getConfig();
+    }
+
+    public FileConfiguration getConfig() {
+        return config;
     }
 
     @Override
@@ -187,6 +197,9 @@ public class LoginQueue extends JavaPlugin
         if (!onTheClock.contains(p))
         {
             onTheClock.add(p);
+            if (config.getBoolean("discord.events.player-on-clock", false)) {
+                discordWebhook(getNameFromUUID(p) + " is on the clock!");
+            }
         }
     }
 
@@ -309,5 +322,20 @@ public class LoginQueue extends JavaPlugin
             time = time + " " + secondsLeft + "s";
         }
         return time;
+    }
+
+    public static void discordWebhook(String content) {
+        String webhook = config.getString("discord.webhook", "");
+        if (!webhook.equals("")) {
+            try {
+                HttpClient client = HttpClients.createDefault();
+                HttpPost post = new HttpPost(webhook);
+                List<NameValuePair> params = new ArrayList<>();
+                params.add(new BasicNameValuePair("username", "Login Queue"));
+                params.add(new BasicNameValuePair("content", content));
+                post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+                client.execute(post);
+            } catch (Exception ignored) {/* Webhook failed */}
+        }
     }
 }
