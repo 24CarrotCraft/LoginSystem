@@ -37,7 +37,8 @@ public class Join implements Listener
 
         plugin.checkIfUsersShouldBeOnClock(0);
 
-        if (plugin.getConfig().getBoolean("discord.events.queue-empty", false) && beforeSize != 0 && plugin.getHighestQueuePos() == 0) {
+        // If webhook is enabled, there was a queue and now there isn't, and the player can't bypass the queue
+        if (plugin.getConfig().getBoolean("discord.events.queue-empty", false) && beforeSize != 0 && plugin.getHighestQueuePos() == 0 && !p.hasPermission("civex.queue.bypass")) {
             LoginQueue.discordWebhook("The queue is empty!");
         }
     }
