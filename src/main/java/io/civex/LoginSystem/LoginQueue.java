@@ -67,10 +67,6 @@ public class LoginQueue extends JavaPlugin
         config = Bukkit.getPluginManager().getPlugin("LoginQueue").getConfig();
     }
 
-    public FileConfiguration getConfig() {
-        return config;
-    }
-
     @Override
     public void reloadConfig() {
         super.reloadConfig();
